@@ -1,0 +1,10 @@
+# This is Git's per-user configuration file.
+[user]
+# Please adapt and uncomment the following lines:
+name = Horacio Gonzalez
+email = horacio.gonzalez@gmail.com
+	signingkey = 4054B1C901B2C41957C85B4F19C3B639A4024F7A
+[commit]
+	gpgSign = true
+[gpg]
+	program = /opt/homebrew/bin/gpg
