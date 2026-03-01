@@ -3,7 +3,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 . "$HOME/.cargo/env"
 
 
-export PATH=~/opt/tinygo/bin:~/opt/bin:~/go/bin:$PATH
+export PATH=~/opt/yazi:~/opt/tinygo/bin:~/opt/bin:~/go/bin:$PATH
 
 export WASMTIME_HOME="$HOME/.wasmtime"
 export PATH="$WASMTIME_HOME/bin:$PATH"

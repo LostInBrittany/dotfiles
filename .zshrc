@@ -59,3 +59,9 @@ export PATH="/Users/horacio/.antigravity/antigravity/bin:$PATH"
 ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
 export PATH="/Users/horacio/.rd/bin:$PATH"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
+
+# Set CLAUDE_CODE_TASK_LIST_ID automatically based on the current directory
+# so Claude Code tasks persist across sessions per project.
+claude() {
+  CLAUDE_CODE_TASK_LIST_ID="$(basename "$PWD")" command claude "$@"
+}
