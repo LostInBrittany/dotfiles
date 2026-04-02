@@ -1,3 +1,5 @@
 theme = Terminal Basic
 font-family = BlexMono Nerd Font
 font-size = 15
+# Control which features are enabled
+shell-integration-features = cursor,sudo,title,ssh-env

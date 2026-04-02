@@ -1,6 +1,8 @@
 setopt NO_AUTO_LIST BASH_AUTO_LIST NO_MENU_COMPLETE NO_AUTO_MENU
 setopt INTERACTIVE_COMMENTS
+setopt INC_APPEND_HISTORY
 unsetopt BEEP
+
 
 autoload -U colors && colors
 #export PS1="%{$fg[blue]%}%n@%m:%~ $ %{$reset_color%}"
@@ -29,7 +31,10 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 # pyenv
-eval "$(pyenv init -)"
+# pyenv (interactive shells only)
+if [[ -o interactive ]]; then
+  eval "$(pyenv init -)"
+fi
 
 [[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code --locate-shell-integration-path zsh)"
 
@@ -65,3 +70,11 @@ export PATH="/Users/horacio/.rd/bin:$PATH"
 claude() {
   CLAUDE_CODE_TASK_LIST_ID="$(basename "$PWD")" command claude "$@"
 }
+
+export RTK_HOOK_AUDIT=1
+export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+
+# opencode
+export PATH=/Users/horacio/.opencode/bin:$PATH
+export PATH=/Users/horacio/.meteor:$PATH
+export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
