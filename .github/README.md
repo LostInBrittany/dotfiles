@@ -13,6 +13,7 @@ yadm is a thin wrapper around Git that uses `$HOME` as its work tree, so files s
 | `.npmrc` | npm settings |
 | `.config/ghostty/config` | [Ghostty](https://ghostty.org) terminal |
 | `.config/iterm2/` | iTerm2 preferences |
+| `.config/herdr/`, `.config/herdr-app/` | Herdr: settings, key bindings, my custom layout (`my-main`) and tabs mod (`my-tabs`) |
 | `.claude/settings.json`, `.claude/statusline.*` | [Claude Code](https://claude.com/claude-code) settings and custom status line |
 | `.claude/skills/`, `.agents/skills/` | Claude Code and agent skills |
 
