@@ -22,20 +22,57 @@ To control an application with Clever Tools, it must be linked to a local direct
 
 ## How to install Clever Tools
 
-Clever Cloud CLI is based on Node.js. We thought it to be easily available on any platform. Thus, you can download Clever Tools as [a npm package](https://www.npmjs.com/package/clever-tools), but also through package managers or as a binary on many systems:
+Clever Tools is available as a npm package, through package managers, or as a standalone binary on many systems:
 
 
+
+### Node.js
+
+Clever Tools is available as [a npm package](https://www.npmjs.com/package/clever-tools):
+
+#### npm
+
+```
+npm install -g clever-tools
+```
+
+#### pnpm
+
+```
+pnpm add -g clever-tools
+```
+
+#### Bun
+
+```
+bun add -g clever-tools
+```
+
+#### Yarn
+
+```
+yarn global add clever-tools
+```
 
 ### GNU/Linux
 
 #### Arch Linux (AUR)
 
-If you use Arch Linux, install packages [from AUR](https://aur.archlinux.org/packages/clever-tools-bin/). If you don't know how to use this, run:
+If you use Arch Linux, install Clever Tools from AUR. Two packages are available, they provide the same `clever` command and cannot be installed side by side:
+
+- [`clever-tools`](https://aur.archlinux.org/packages/clever-tools/): the Node.js flavor, it runs on the `nodejs` package of your system
+- [`clever-tools-bin`](https://aur.archlinux.org/packages/clever-tools-bin/): a self-contained binary, with no runtime dependency
+
+If you use an AUR helper like `yay`, run:
 
 ```
-git clone https://aur.archlinux.org/clever-tools-bin.git clever-tools
-cd clever-tools
-makepkg -si
+yay -S clever-tools
+```
+
+Or, for the self-contained binary:
+
+```
+yay -S clever-tools-bin
 ```
 
 #### CentOS/Fedora (.rpm)
@@ -156,6 +193,29 @@ In your `Dockerfile` copy `clever-tools` from the image itself with a simple one
 COPY --from=clevercloud/clever-tools /bin/clever /usr/local/bin/clever
 ```
 
+### Mise package manager
+
+If you use [Mise](https://mise.jdx.dev), install Clever Tools globally from its GitHub releases through the [GitHub backend](https://mise.jdx.dev/dev-tools/backends/github.html):
+
+```
+mise use -g github:CleverCloud/clever-tools
+```
+
+To install a specific version globally, add it after `@`:
+
+```
+mise use -g github:CleverCloud/clever-tools@5.2.0
+```
+
+Mise selects the release archive for your operating system. These binaries target x64 on Linux and Windows, and Apple Silicon on macOS; for other architectures, use the npm package.
+
+To pin a version for a project, add it to its `mise.toml`:
+
+```toml
+[tools]
+"github:CleverCloud/clever-tools" = "5.2.0"
+```
+
 ### Nix package manager
 
 If you are using Nix on NixOS or any other compatible system, the package is available in both `stable` and `unstable` channels. Follow [these instructions](https://search.nixos.org/packages?channel=unstable&show=clever-tools&from=0&size=50&sort=relevance&type=packages&query=clever-tools).
@@ -228,12 +288,16 @@ Applications deployment zones (region): `par`, `parhds`, `fr-north-hds`, `grahds
   - plans: `dev`, `xxs_sml`, `xxs_med`, `xxs_big`, `xs_tny`, `xs_sml`, `xs_med`, `xs_big`, `s_sml`, `s_med`, `s_big`, `m_sml`, `m_med`, `m_big`, `l_sml`, `l_med`, `l_big`, `xl_sml`, `xl_med`, `xl_big`, `xxl_sml`, `xxl_med`, `xxl_big`, `xxl_hug`
   - zones: `par`, `parhds`, `grahds`, `ldn`, `mtl`, `rbx`, `rbxhds`, `scw`, `sgp`, `syd`, `wsw`
 
+- `openvisio`:
+  - plans: `visio-plan-1`
+  - zones: `par`
+
 - `otoroshi`:
   - plans: `base`
   - zones: `par`, `fr-north-hds`, `grahds`, `mtl`, `rbx`, `rbxhds`, `scw`, `sgp`, `syd`, `wsw`
 
 - `postgresql-addon`:
-  - plans: `dev`, `xxs_sml`, `xxs_med`, `xxs_big`, `xs_tny`, `xs_sml`, `xs_med`, `xs_big`, `s_sml`, `s_med`, `s_big`, `s_hug`, `m_sml`, `m_med`, `m_big`, `l_sml`, `l_med`, `l_big`, `xl_sml`, `l_gnt`, `xl_med`, `xl_big`, `xl_hug`, `xl_gnt`, `xxl_sml`, `xxl_med`, `xxl_big`, `xxl_hug`, `xxxl_sml`, `xxxl_med`, `xxxl_big`, `3xl_cpu_tit`
+  - plans: `dev`, `xxs_tny`, `xxs_sml`, `xxs_hug`, `xxs_med`, `xxs_gnt`, `xxs_big`, `xs_tny`, `xxs_tit`, `xs_sml`, `xs_med`, `xs_big`, `xs_hug`, `xs_gnt`, `s_tny`, `s_sml`, `s_med`, `s_big`, `xs_tit`, `s_hug`, `s_gnt`, `m_sml`, `m_med`, `m_big`, `s_tit`, `m_hug`, `m_gnt`, `l_sml`, `l_med`, `l_big`, `m_tit`, `l_hug`, `xl_sml`, `l_gnt`, `xl_med`, `xl_big`, `l_tit`, `xl_hug`, `xl_gnt`, `xxl_sml`, `xxl_med`, `xxl_big`, `xl_tit`, `xxl_hug`, `xxl_gnt`, `xxxl_sml`, `xxxl_med`, `xxxl_big`, `xxl_tit`, `4xl_sml`, `xxxl_hug`, `4xl_med`, `5xl_sml`, `xxxl_gnt`, `4xl_big`, `5xl_med`, `4xl_hug`, `6xl_sml`, `5xl_big`, `6xl_med`, `4xl_gnt`, `xxxl_tit`, `5xl_hug`, `6xl_big`, `6xl_hug`, `5xl_gnt`, `4xl_tit`, `6xl_gnt`, `5xl_tit`
   - zones: `par`, `parhds`, `grahds`, `ldn`, `mtl`, `rbx`, `rbxhds`, `scw`, `sgp`, `syd`, `wsw`
 
 - `redis-addon`:
@@ -256,11 +320,11 @@ clever accesslogs [options]
 **Options**
 ```
     --addon <addon-id>            Add-on ID or real ID
-    --after, --since <after>      Fetch logs after this date/time (ISO8601 date, positive number in seconds or duration, e.g.: 1h)
+    --after, --since <after>      Fetch logs after this date/time (ISO8601 date, positive number in seconds, duration, e.g.: 1h, or now)
 -a, --alias <alias>               Short name for the application
     --app <app-id|app-name>       Application to manage by its ID (or name, if unambiguous)
-    --before, --until <before>    Fetch logs before this date/time (ISO8601 date, positive number in seconds or duration, e.g.: 1h)
--F, --format <format>             Output format (human, json, json-stream) (default: human)
+    --before, --until <before>    Fetch logs before this date/time (ISO8601 date, positive number in seconds, duration, e.g.: 1h, or now)
+-F, --format <format>             Output format (clf only outputs HTTP access logs) (human, json, json-stream, clf) (default: human)
 ```
 
 ## activity
@@ -348,7 +412,7 @@ addon-id|addon-name                     Add-on ID (or name, if unambiguous)
 **Options**
 ```
 -o, --org, --owner <org-id|org-name>    Organisation to target by its ID (or name, if unambiguous)
--y, --yes                               Skip confirmation and delete the add-on directly
+-y, --yes                               Skip confirmation prompts
 ```
 
 ### addon env
@@ -370,7 +434,7 @@ addon-id                                Add-on ID or real ID
 **Options**
 ```
 -F, --format <format>                   Output format (human, json, shell) (default: human)
--o, --org, --owner <org-id|org-name>    Organisation to target by its ID (or name, if unambiguous)
+-o, --org, --owner <org-id|org-name>    Organisation to target by its ID (or name, if unambiguous) (deprecated, organisation is now resolved automatically)
 ```
 
 ### addon list
@@ -403,7 +467,8 @@ clever addon providers [options]
 
 **Options**
 ```
--F, --format <format>    Output format (human, json) (default: human)
+-F, --format <format>                   Output format (human, json) (default: human)
+-o, --org, --owner <org-id|org-name>    Organisation to target by its ID (or name, if unambiguous)
 ```
 
 #### addon providers show
@@ -419,12 +484,13 @@ clever addon providers show <addon-provider> [options]
 
 **Arguments**
 ```
-addon-provider           Add-on provider
+addon-provider                          Add-on provider
 ```
 
 **Options**
 ```
--F, --format <format>    Output format (human, json) (default: human)
+-F, --format <format>                   Output format (human, json) (default: human)
+-o, --org, --owner <org-id|org-name>    Organisation to target by its ID (or name, if unambiguous)
 ```
 
 ### addon rename
@@ -797,7 +863,7 @@ database-id|addon-id                    Any database ID (format: addon_UUID, pos
 **Options**
 ```
 -F, --format <format>                   Output format (human, json) (default: human)
--o, --org, --owner <org-id|org-name>    Organisation to target by its ID (or name, if unambiguous)
+-o, --org, --owner <org-id|org-name>    Organisation to target by its ID (or name, if unambiguous) (deprecated, organisation is now resolved automatically)
 ```
 
 #### database backups download
@@ -819,7 +885,7 @@ backup-id                               A Database backup ID (format: UUID)
 
 **Options**
 ```
--o, --org, --owner <org-id|org-name>    Organisation to target by its ID (or name, if unambiguous)
+-o, --org, --owner <org-id|org-name>    Organisation to target by its ID (or name, if unambiguous) (deprecated, organisation is now resolved automatically)
     --output, --out <file-path>         Redirect the output of the command in a file
 ```
 
@@ -1048,6 +1114,32 @@ clever drain [options]
 
 **Options**
 ```
+    --addon <addon-id>         Add-on ID or real ID
+-a, --alias <alias>            Short name for the application
+    --app <app-id|app-name>    Application to manage by its ID (or name, if unambiguous)
+-F, --format <format>          Output format (human, json) (default: human)
+    --type <drain-type>        Only list drains of this type (betterstack, datadog, elasticsearch, newrelic, ovh-tcp, raw-http, sekoia, splunk, syslog-tcp, syslog-udp)
+```
+
+### drain check
+
+**Description:** Check that a drain's recipient is reachable and accepts deliveries
+
+**Since:** 4.11.0
+
+**Usage**
+```
+clever drain check <drain-id> [options]
+```
+
+**Arguments**
+```
+drain-id                       Drain ID
+```
+
+**Options**
+```
+    --addon <addon-id>         Add-on ID or real ID
 -a, --alias <alias>            Short name for the application
     --app <app-id|app-name>    Application to manage by its ID (or name, if unambiguous)
 -F, --format <format>          Output format (human, json) (default: human)
@@ -1061,24 +1153,263 @@ clever drain [options]
 
 **Usage**
 ```
-clever drain create <drain-type> <drain-url> [options]
+clever drain create
+```
+
+#### drain create betterstack
+
+**Description:** Create a Better Stack drain
+
+**Since:** 4.11.0
+
+**Usage**
+```
+clever drain create betterstack --source-token <source-token> <drain-url> [options]
 ```
 
 **Arguments**
 ```
-drain-type                           Drain type (datadog, elasticsearch, newrelic, ovh-tcp, raw-http, syslog-tcp, syslog-udp)
 drain-url                            Drain URL
 ```
 
 **Options**
 ```
+-t, --source-token <source-token>    Source token (required)
+    --addon <addon-id>               Add-on ID or real ID
 -a, --alias <alias>                  Short name for the application
--k, --api-key <api-key>              API key (for newrelic)
     --app <app-id|app-name>          Application to manage by its ID (or name, if unambiguous)
--i, --index-prefix <index-prefix>    Optional index prefix (for elasticsearch), `logstash` value is used if not set
--p, --password <password>            Basic auth password (for elasticsearch or raw-http)
--s, --sd-params <sd-params>          RFC5424 structured data parameters (for ovh-tcp), e.g.: `X-OVH-TOKEN=\"REDACTED\"`
--u, --username <username>            Basic auth username (for elasticsearch or raw-http)
+    --kind <kind>                    Kind of logs sent to the drain (LOG, ACCESSLOG) (default: LOG)
+```
+
+#### drain create datadog
+
+**Description:** Create a Datadog drain
+
+**Since:** 0.9.0
+
+**Usage**
+```
+clever drain create datadog <drain-url> [options]
+```
+
+**Arguments**
+```
+drain-url                      Drain URL
+```
+
+**Options**
+```
+    --addon <addon-id>         Add-on ID or real ID
+-a, --alias <alias>            Short name for the application
+    --app <app-id|app-name>    Application to manage by its ID (or name, if unambiguous)
+    --kind <kind>              Kind of logs sent to the drain (LOG, ACCESSLOG) (default: LOG)
+```
+
+#### drain create elasticsearch
+
+**Description:** Create an Elasticsearch drain
+
+**Since:** 0.9.0
+
+**Usage**
+```
+clever drain create elasticsearch --index-prefix <index-prefix> <drain-url> [options]
+```
+
+**Arguments**
+```
+drain-url                            Drain URL, must end with '/_bulk'
+```
+
+**Options**
+```
+-i, --index-prefix <index-prefix>    Index prefix, indexes are created as `<index-prefix>-YYYY-MM-DD` (required)
+    --addon <addon-id>               Add-on ID or real ID
+-a, --alias <alias>                  Short name for the application
+    --app <app-id|app-name>          Application to manage by its ID (or name, if unambiguous)
+    --kind <kind>                    Kind of logs sent to the drain (LOG, ACCESSLOG) (default: LOG)
+-p, --password <password>            Basic auth password
+-u, --username <username>            Basic auth username
+```
+
+#### drain create newrelic
+
+**Description:** Create a New Relic drain
+
+**Since:** 0.9.0
+
+**Usage**
+```
+clever drain create newrelic --api-key <api-key> <drain-url> [options]
+```
+
+**Arguments**
+```
+drain-url                      Drain URL
+```
+
+**Options**
+```
+-k, --api-key <api-key>        API key (required)
+    --addon <addon-id>         Add-on ID or real ID
+-a, --alias <alias>            Short name for the application
+    --app <app-id|app-name>    Application to manage by its ID (or name, if unambiguous)
+    --kind <kind>              Kind of logs sent to the drain (LOG, ACCESSLOG) (default: LOG)
+```
+
+#### drain create ovh-tcp
+
+**Description:** Create an OVH TCP drain
+
+**Since:** 0.9.0
+
+**Usage**
+```
+clever drain create ovh-tcp <drain-url> [options]
+```
+
+**Arguments**
+```
+drain-url                      Drain URL
+```
+
+**Options**
+```
+    --addon <addon-id>         Add-on ID or real ID
+-a, --alias <alias>            Short name for the application
+    --app <app-id|app-name>    Application to manage by its ID (or name, if unambiguous)
+    --kind <kind>              Kind of logs sent to the drain (LOG, ACCESSLOG) (default: LOG)
+-s, --sd-params <sd-params>    RFC5424 structured data parameters, e.g.: `token=\"REDACTED\"`
+```
+
+#### drain create raw-http
+
+**Description:** Create a raw HTTP drain
+
+**Since:** 0.9.0
+
+**Usage**
+```
+clever drain create raw-http <drain-url> [options]
+```
+
+**Arguments**
+```
+drain-url                      Drain URL
+```
+
+**Options**
+```
+    --addon <addon-id>         Add-on ID or real ID
+-a, --alias <alias>            Short name for the application
+    --app <app-id|app-name>    Application to manage by its ID (or name, if unambiguous)
+    --kind <kind>              Kind of logs sent to the drain (LOG, ACCESSLOG) (default: LOG)
+-p, --password <password>      Basic auth password
+-u, --username <username>      Basic auth username
+```
+
+#### drain create sekoia
+
+**Description:** Create a Sekoia.io drain
+
+**Since:** 5.3.0
+
+**Usage**
+```
+clever drain create sekoia --intake-key <intake-key> <drain-url> [options]
+```
+
+**Arguments**
+```
+drain-url                                    Drain URL
+```
+
+**Options**
+```
+    --intake-key <intake-key>                Intake key (required)
+    --addon <addon-id>                       Add-on ID or real ID
+-a, --alias <alias>                          Short name for the application
+    --app <app-id|app-name>                  Application to manage by its ID (or name, if unambiguous)
+    --kind <kind>                            Kind of logs sent to the drain (LOG, ACCESSLOG) (default: LOG)
+    --tls-verification <tls-verification>    TLS verification mode, use `trustful` for a self-hosted intake behind a private CA (default, trustful)
+```
+
+#### drain create splunk
+
+**Description:** Create a Splunk HEC drain
+
+**Since:** 5.0.0
+
+**Usage**
+```
+clever drain create splunk --hec-token <hec-token> <drain-url> [options]
+```
+
+**Arguments**
+```
+drain-url                                    Drain URL
+```
+
+**Options**
+```
+    --hec-token <hec-token>                  HTTP Event Collector token (required)
+    --addon <addon-id>                       Add-on ID or real ID
+-a, --alias <alias>                          Short name for the application
+    --app <app-id|app-name>                  Application to manage by its ID (or name, if unambiguous)
+    --index <index>                          Optional target index, the HEC token's own index is used if not set
+    --kind <kind>                            Kind of logs sent to the drain (LOG, ACCESSLOG) (default: LOG)
+    --sourcetype <sourcetype>                Optional sourcetype, the HEC token's own sourcetype is used if not set
+    --tls-verification <tls-verification>    TLS verification mode, use `trustful` to accept a self-signed certificate (default, trustful)
+```
+
+#### drain create syslog-tcp
+
+**Description:** Create a Syslog TCP drain
+
+**Since:** 0.9.0
+
+**Usage**
+```
+clever drain create syslog-tcp <drain-url> [options]
+```
+
+**Arguments**
+```
+drain-url                      Drain URL
+```
+
+**Options**
+```
+    --addon <addon-id>         Add-on ID or real ID
+-a, --alias <alias>            Short name for the application
+    --app <app-id|app-name>    Application to manage by its ID (or name, if unambiguous)
+    --kind <kind>              Kind of logs sent to the drain (LOG, ACCESSLOG) (default: LOG)
+-s, --sd-params <sd-params>    RFC5424 structured data parameters, e.g.: `token=\"REDACTED\"`
+```
+
+#### drain create syslog-udp
+
+**Description:** Create a Syslog UDP drain
+
+**Since:** 0.9.0
+
+**Usage**
+```
+clever drain create syslog-udp <drain-url> [options]
+```
+
+**Arguments**
+```
+drain-url                      Drain URL
+```
+
+**Options**
+```
+    --addon <addon-id>         Add-on ID or real ID
+-a, --alias <alias>            Short name for the application
+    --app <app-id|app-name>    Application to manage by its ID (or name, if unambiguous)
+    --kind <kind>              Kind of logs sent to the drain (LOG, ACCESSLOG) (default: LOG)
+-s, --sd-params <sd-params>    RFC5424 structured data parameters, e.g.: `token=\"REDACTED\"`
 ```
 
 ### drain disable
@@ -1099,6 +1430,7 @@ drain-id                       Drain ID
 
 **Options**
 ```
+    --addon <addon-id>         Add-on ID or real ID
 -a, --alias <alias>            Short name for the application
     --app <app-id|app-name>    Application to manage by its ID (or name, if unambiguous)
 ```
@@ -1121,6 +1453,7 @@ drain-id                       Drain ID
 
 **Options**
 ```
+    --addon <addon-id>         Add-on ID or real ID
 -a, --alias <alias>            Short name for the application
     --app <app-id|app-name>    Application to manage by its ID (or name, if unambiguous)
 ```
@@ -1143,9 +1476,28 @@ drain-id                       Drain ID
 
 **Options**
 ```
+    --addon <addon-id>         Add-on ID or real ID
 -a, --alias <alias>            Short name for the application
     --app <app-id|app-name>    Application to manage by its ID (or name, if unambiguous)
 -F, --format <format>          Output format (human, json) (default: human)
+```
+
+### drain list
+
+**Description:** List the drains of all applications and add-ons
+
+**Since:** 5.3.0
+
+**Usage**
+```
+clever drain list [options]
+```
+
+**Options**
+```
+-F, --format <format>                   Output format (human, json) (default: human)
+-o, --org, --owner <org-id|org-name>    Organisation to target by its ID (or name, if unambiguous)
+    --type <drain-type>                 Only list drains of this type (betterstack, datadog, elasticsearch, newrelic, ovh-tcp, raw-http, sekoia, splunk, syslog-tcp, syslog-udp)
 ```
 
 ### drain remove
@@ -1166,6 +1518,7 @@ drain-id                       Drain ID
 
 **Options**
 ```
+    --addon <addon-id>         Add-on ID or real ID
 -a, --alias <alias>            Short name for the application
     --app <app-id|app-name>    Application to manage by its ID (or name, if unambiguous)
 ```
@@ -1457,6 +1810,29 @@ clever features list [options]
 clever help
 ```
 
+## instances
+
+**Description:** List instances of an application
+
+**Since:** 5.1.0
+
+**Usage**
+```
+clever instances [options]
+```
+
+**Options**
+```
+    --after, --since <after>           List instances that existed after this date/time, in any state (ISO8601 date, positive number in seconds, duration, e.g.: 1h, or now)
+-a, --alias <alias>                    Short name for the application
+    --all                              List instances in any state, including deleted ones (default: only running instances)
+    --app <app-id|app-name>            Application to manage by its ID (or name, if unambiguous)
+    --before, --until <before>         List instances that existed before this date/time, in any state (ISO8601 date, positive number in seconds, duration, e.g.: 1h, or now)
+    --deployment-id <deployment-id>    List instances created by this deployment, in any state
+-F, --format <format>                  Output format (human, json) (default: human)
+    --limit <limit>                    Maximum number of instances to list, keeping the most recent ones (1 to 1000) (default: 100)
+```
+
 ## k8s
 
 **Description:** Manage Kubernetes clusters
@@ -1466,6 +1842,29 @@ clever help
 **Usage**
 ```
 clever k8s
+```
+
+### k8s activity
+
+**Description:** Show recent deployment events of a Kubernetes cluster
+
+**Since:** 4.9.0
+
+**Usage**
+```
+clever k8s activity <cluster-id|cluster-name> [options]
+```
+
+**Arguments**
+```
+cluster-id|cluster-name                 Kubernetes cluster ID or name
+```
+
+**Options**
+```
+-F, --format <format>                   Output format (human, json) (default: human)
+    --limit <limit>                     Number of events to fetch (1 to 1000) (default: 50)
+-o, --org, --owner <org-id|org-name>    Organisation to target by its ID (or name, if unambiguous)
 ```
 
 ### k8s add-persistent-storage
@@ -1502,13 +1901,23 @@ clever k8s create <cluster-name> [options]
 
 **Arguments**
 ```
-cluster-name                            Kubernetes cluster name
+cluster-name                                     Kubernetes cluster name
 ```
 
 **Options**
 ```
--o, --org, --owner <org-id|org-name>    Organisation to target by its ID (or name, if unambiguous)
--w, --watch                             Watch the deployment until the cluster is deployed
+    --autoscaling                                Enable the cluster autoscaler
+    --cluster-version <cluster-version>          Kubernetes version to deploy (e.g.: 1.36)
+    --description <description>                  Free-form cluster description
+    --flavor <flavor>                            Control plane flavor
+    --nodegroup <flavor:count>                   Initial node group (format: <flavor>:<count>, e.g.: XS:3)
+-o, --org, --owner <org-id|org-name>             Organisation to target by its ID (or name, if unambiguous)
+    --persistent-storage                         Enable persistent storage (Ceph CSI)
+    --replication-factor <replication-factor>    Control plane replication factor
+    --tag <tag[,tag...]>                         Semantic tags (comma-separated, e.g.: env:prod,team:platform)
+    --topology <topology>                        Cluster topology (must be set with --flavor and --replication-factor)
+-w, --watch                                      Watch the deployment until the cluster is deployed
+-y, --yes                                        Skip confirmation prompts
 ```
 
 ### k8s delete
@@ -1530,7 +1939,7 @@ cluster-id|cluster-name                 Kubernetes cluster ID or name
 **Options**
 ```
 -o, --org, --owner <org-id|org-name>    Organisation to target by its ID (or name, if unambiguous)
--y, --yes                               Skip confirmation and delete the add-on directly
+-y, --yes                               Skip confirmation prompts
 ```
 
 ### k8s get
@@ -1591,6 +2000,251 @@ clever k8s list [options]
 ```
 -F, --format <format>                   Output format (human, json) (default: human)
 -o, --org, --owner <org-id|org-name>    Organisation to target by its ID (or name, if unambiguous)
+```
+
+### k8s nodegroups
+
+**Description:** Manage Kubernetes node groups
+
+**Since:** 4.9.0
+
+**Usage**
+```
+clever k8s nodegroups
+```
+
+#### k8s nodegroups create
+
+**Description:** Create a node group on a Kubernetes cluster
+
+**Since:** 4.9.0
+
+**Usage**
+```
+clever k8s nodegroups create <cluster-id|cluster-name> <nodegroup-name> <flavor:count> [options]
+```
+
+**Arguments**
+```
+cluster-id|cluster-name                 Kubernetes cluster ID or name
+nodegroup-name                          Node group name (lowercase RFC 1123, max 63 chars)
+flavor:count                            Node group flavor and target node count (format: <flavor>:<count>, e.g.: XS:3)
+```
+
+**Options**
+```
+    --autoscaling                       Enable cluster autoscaler for this node group (requires --min and --max)
+    --description <description>         Free-form node group description
+    --max <max>                         Maximum node count when autoscaling is enabled
+    --min <min>                         Minimum node count when autoscaling is enabled
+-o, --org, --owner <org-id|org-name>    Organisation to target by its ID (or name, if unambiguous)
+    --tag <tag>                         Arbitrary tag attached to the node group
+```
+
+#### k8s nodegroups delete
+
+**Description:** Delete a node group from a Kubernetes cluster
+
+**Since:** 4.9.0
+
+**Usage**
+```
+clever k8s nodegroups delete <cluster-id|cluster-name> <nodegroup-id|nodegroup-name> [options]
+```
+
+**Arguments**
+```
+cluster-id|cluster-name                 Kubernetes cluster ID or name
+nodegroup-id|nodegroup-name             Kubernetes node group ID or name
+```
+
+**Options**
+```
+-o, --org, --owner <org-id|org-name>    Organisation to target by its ID (or name, if unambiguous)
+-y, --yes                               Skip confirmation prompts
+```
+
+#### k8s nodegroups get
+
+**Description:** Get information about a Kubernetes node group
+
+**Since:** 4.9.0
+
+**Usage**
+```
+clever k8s nodegroups get <cluster-id|cluster-name> <nodegroup-id|nodegroup-name> [options]
+```
+
+**Arguments**
+```
+cluster-id|cluster-name                 Kubernetes cluster ID or name
+nodegroup-id|nodegroup-name             Kubernetes node group ID or name
+```
+
+**Options**
+```
+-F, --format <format>                   Output format (human, json) (default: human)
+-o, --org, --owner <org-id|org-name>    Organisation to target by its ID (or name, if unambiguous)
+```
+
+#### k8s nodegroups list
+
+**Description:** List the node groups of a Kubernetes cluster
+
+**Since:** 4.9.0
+
+**Usage**
+```
+clever k8s nodegroups list <cluster-id|cluster-name> [options]
+```
+
+**Arguments**
+```
+cluster-id|cluster-name                 Kubernetes cluster ID or name
+```
+
+**Options**
+```
+-F, --format <format>                   Output format (human, json) (default: human)
+-o, --org, --owner <org-id|org-name>    Organisation to target by its ID (or name, if unambiguous)
+```
+
+#### k8s nodegroups update
+
+**Description:** Update a node group on a Kubernetes cluster
+
+**Since:** 4.9.0
+
+**Usage**
+```
+clever k8s nodegroups update <cluster-id|cluster-name> <nodegroup-id|nodegroup-name> [options]
+```
+
+**Arguments**
+```
+cluster-id|cluster-name                 Kubernetes cluster ID or name
+nodegroup-id|nodegroup-name             Kubernetes node group ID or name
+```
+
+**Options**
+```
+    --autoscaling                       Enable the cluster autoscaler
+    --count <count>                     Target node count
+    --description <description>         Free-form node group description
+    --disable-autoscaling               Disable the cluster autoscaler
+    --max <max>                         Maximum node count (autoscaling bound)
+    --min <min>                         Minimum node count (autoscaling bound)
+-o, --org, --owner <org-id|org-name>    Organisation to target by its ID (or name, if unambiguous)
+    --tag <tag>                         Arbitrary tag attached to the node group
+```
+
+### k8s quota
+
+**Description:** Get the Kubernetes quota, usage and remaining of an organisation
+
+**Since:** 4.9.0
+
+**Usage**
+```
+clever k8s quota [options]
+```
+
+**Options**
+```
+-F, --format <format>                   Output format (human, json) (default: human)
+-o, --org, --owner <org-id|org-name>    Organisation to target by its ID (or name, if unambiguous)
+```
+
+### k8s update
+
+**Description:** Update a Kubernetes cluster metadata or features
+
+**Since:** 4.9.0
+
+**Usage**
+```
+clever k8s update <cluster-id|cluster-name> [options]
+```
+
+**Arguments**
+```
+cluster-id|cluster-name                 Kubernetes cluster ID or name
+```
+
+**Options**
+```
+    --autoscaling                       Enable the cluster autoscaler
+    --description <description>         Free-form cluster description
+    --disable-autoscaling               Disable the cluster autoscaler
+    --name <name>                       Rename the cluster
+-o, --org, --owner <org-id|org-name>    Organisation to target by its ID (or name, if unambiguous)
+    --tag <tag[,tag...]>                Replace tags (comma-separated, e.g.: env:prod,team:platform)
+```
+
+### k8s version
+
+**Description:** Check a Kubernetes cluster deployed version
+
+**Since:** 4.9.0
+
+**Usage**
+```
+clever k8s version <cluster-id|cluster-name> [options]
+```
+
+**Arguments**
+```
+cluster-id|cluster-name                 Kubernetes cluster ID or name
+```
+
+**Options**
+```
+-F, --format <format>                   Output format (human, json) (default: human)
+-o, --org, --owner <org-id|org-name>    Organisation to target by its ID (or name, if unambiguous)
+```
+
+#### k8s version check
+
+**Description:** Check a Kubernetes cluster deployed version
+
+**Since:** 4.9.0
+
+**Usage**
+```
+clever k8s version check <cluster-id|cluster-name> [options]
+```
+
+**Arguments**
+```
+cluster-id|cluster-name                 Kubernetes cluster ID or name
+```
+
+**Options**
+```
+-F, --format <format>                   Output format (human, json) (default: human)
+-o, --org, --owner <org-id|org-name>    Organisation to target by its ID (or name, if unambiguous)
+```
+
+#### k8s version update
+
+**Description:** Update a Kubernetes cluster to a target version
+
+**Since:** 4.9.0
+
+**Usage**
+```
+clever k8s version update <cluster-id|cluster-name> [options]
+```
+
+**Arguments**
+```
+cluster-id|cluster-name                 Kubernetes cluster ID or name
+```
+
+**Options**
+```
+-o, --org, --owner <org-id|org-name>    Organisation to target by its ID (or name, if unambiguous)
+    --target <version>                  Target version to upgrade to (e.g.: 24, 2.4, 2.4.1)
 ```
 
 ## keycloak
@@ -1819,7 +2473,7 @@ clever kv <kv-id|addon-id|addon-name> <command> [options]
 **Arguments**
 ```
 kv-id|addon-id|addon-name               Add-on/Real ID (or name, if unambiguous) of a Materia KV or Redis® add-on
-command                                 The raw command to send to the Materia KV or Redis® add-on
+command                                 The raw command to send, followed by its own arguments
 ```
 
 **Options**
@@ -1904,13 +2558,14 @@ clever logs [options]
 **Options**
 ```
     --addon <addon-id>                 Add-on ID or real ID
-    --after, --since <after>           Fetch logs after this date/time (ISO8601 date, positive number in seconds or duration, e.g.: 1h)
+    --after, --since <after>           Fetch logs after this date/time (ISO8601 date, positive number in seconds, duration, e.g.: 1h, or now)
 -a, --alias <alias>                    Short name for the application
     --app <app-id|app-name>            Application to manage by its ID (or name, if unambiguous)
-    --before, --until <before>         Fetch logs before this date/time (ISO8601 date, positive number in seconds or duration, e.g.: 1h)
+    --before, --until <before>         Fetch logs before this date/time (ISO8601 date, positive number in seconds, duration, e.g.: 1h, or now)
     --deployment-id <deployment-id>    Fetch logs for a given deployment
 -F, --format <format>                  Output format (human, json, json-stream) (default: human)
     --search <search>                  Fetch logs matching this pattern
+    --strip-ansi                       Remove the ANSI codes contained in log messages
 ```
 
 ## make-default
@@ -2508,6 +3163,146 @@ notification-id                         Notification ID
 -o, --org, --owner <org-id|org-name>    Organisation to target by its ID (or name, if unambiguous)
 ```
 
+## oauth-consumers
+
+**Description:** Manage OAuth consumers used with a Clever Cloud login
+
+**Since:** 4.8.0
+
+**Usage**
+```
+clever oauth-consumers
+```
+
+### oauth-consumers create
+
+**Description:** Create an OAuth consumer
+
+**Since:** 4.8.0
+
+**Usage**
+```
+clever oauth-consumers create <name> [options]
+```
+
+**Arguments**
+```
+name                                    Consumer name
+```
+
+**Options**
+```
+    --base-url <url>                    OAuth callback base URL
+-d, --description <description>         Consumer description
+-F, --format <format>                   Output format (human, json) (default: human)
+-o, --org, --owner <org-id|org-name>    Organisation to target by its ID (or name, if unambiguous)
+    --picture <url>                     Application logo URL
+    --rights <rights>                   Comma-separated list of rights (access-organisations, access-organisations-bills, access-organisations-consumption-statistics, access-organisations-credit-count, access-personal-information, manage-organisations, manage-organisations-applications, manage-organisations-members, manage-organisations-services, manage-personal-information, manage-ssh-keys, all)
+    --url <url>                         Application home URL
+```
+
+### oauth-consumers delete
+
+**Description:** Delete an OAuth consumer
+
+**Since:** 4.8.0
+
+**Usage**
+```
+clever oauth-consumers delete <consumer-key|consumer-name> [options]
+```
+
+**Arguments**
+```
+consumer-key|consumer-name    OAuth consumer key (or name, if unambiguous)
+```
+
+**Options**
+```
+-y, --yes                     Skip confirmation prompts
+```
+
+### oauth-consumers get
+
+**Description:** Get details of an OAuth consumer
+
+**Since:** 4.8.0
+
+**Usage**
+```
+clever oauth-consumers get <consumer-key|consumer-name> [options]
+```
+
+**Arguments**
+```
+consumer-key|consumer-name    OAuth consumer key (or name, if unambiguous)
+```
+
+**Options**
+```
+-F, --format <format>         Output format (human, json) (default: human)
+    --with-secret             Include the consumer secret in the output
+```
+
+### oauth-consumers list
+
+**Description:** List OAuth consumers
+
+**Since:** 4.8.0
+
+**Usage**
+```
+clever oauth-consumers list [options]
+```
+
+**Options**
+```
+-F, --format <format>    Output format (human, json) (default: human)
+```
+
+### oauth-consumers open
+
+**Description:** Open an OAuth consumer in the Clever Cloud Console
+
+**Since:** 4.8.0
+
+**Usage**
+```
+clever oauth-consumers open <consumer-key|consumer-name>
+```
+
+**Arguments**
+```
+consumer-key|consumer-name    OAuth consumer key (or name, if unambiguous)
+```
+
+### oauth-consumers update
+
+**Description:** Update an OAuth consumer
+
+**Since:** 4.8.0
+
+**Usage**
+```
+clever oauth-consumers update <consumer-key|consumer-name> [options]
+```
+
+**Arguments**
+```
+consumer-key|consumer-name         OAuth consumer key (or name, if unambiguous)
+```
+
+**Options**
+```
+    --base-url <url>               OAuth callback base URL
+-d, --description <description>    Consumer description
+-F, --format <format>              Output format (human, json) (default: human)
+-n, --name <name>                  Consumer name
+    --picture <url>                Application logo URL
+    --rights <rights>              Comma-separated list of rights (access-organisations, access-organisations-bills, access-organisations-consumption-statistics, access-organisations-credit-count, access-personal-information, manage-organisations, manage-organisations-applications, manage-organisations-members, manage-organisations-services, manage-personal-information, manage-ssh-keys, all)
+    --url <url>                    Application home URL
+```
+
 ## open
 
 **Description:** Open an application in the Console
@@ -2635,6 +3430,22 @@ addon-id|addon-name    Add-on ID (or name, if unambiguous)
 **Usage**
 ```
 clever otoroshi open logs <addon-id|addon-name>
+```
+
+**Arguments**
+```
+addon-id|addon-name    Add-on ID (or name, if unambiguous)
+```
+
+#### otoroshi open swaggerui
+
+**Description:** Open the Otoroshi Swagger UI in your browser
+
+**Since:** 4.9.0
+
+**Usage**
+```
+clever otoroshi open swaggerui <addon-id|addon-name>
 ```
 
 **Arguments**
@@ -3062,10 +3873,12 @@ clever ssh [options]
 
 **Options**
 ```
--a, --alias <alias>                    Short name for the application
-    --app <app-id|app-name>            Application to manage by its ID (or name, if unambiguous)
--c, --command <command>                Execute a command on the remote instance and exit
--i, --identity-file <identity-file>    SSH identity file
+-a, --alias <alias>                        Short name for the application
+    --app <app-id|app-name>                Application to manage by its ID (or name, if unambiguous)
+    --app-home                             Run the command from `$APP_HOME` (requires `--command`)
+-c, --command <command>                    Execute a command on the remote instance and exit
+-i, --identity-file <identity-file>        SSH identity file
+    --instance <instance-id|number|any>    Instance to connect to, by ID or number, or `any` (skips interactive selection). Build VMs are only picked by ID, or by `any` when no other instance is running
 ```
 
 ## ssh-keys
@@ -3254,6 +4067,35 @@ port                           port identifying the TCP redirection
     --namespace <namespace>    Namespace in which the TCP redirection should be (required)
 -a, --alias <alias>            Short name for the application
     --app <app-id|app-name>    Application to manage by its ID (or name, if unambiguous)
+```
+
+## terraform
+
+**Description:** Terraform commands
+
+**Since:** 5.3.0
+
+**Usage**
+```
+clever terraform
+```
+
+### terraform generate
+
+**Description:** Generate terraform import file
+
+**Since:** 5.3.0
+
+**Usage**
+```
+clever terraform generate [options]
+```
+
+**Options**
+```
+    --app <app-id|app-name>             Application to manage by its ID (or name, if unambiguous)
+-o, --org, --owner <org-id|org-name>    Organisation to target by its ID (or name, if unambiguous)
+-t, --tag <tag>                         Filter resources by tag
 ```
 
 ## tokens

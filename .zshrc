@@ -78,3 +78,13 @@ export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
 export PATH=/Users/horacio/.opencode/bin:$PATH
 export PATH=/Users/horacio/.meteor:$PATH
 export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
+
+# Added by Antigravity IDE
+export PATH="/Users/horacio/.antigravity-ide/antigravity-ide/bin:$PATH"
+
+
+# Added by Antigravity CLI installer
+export PATH="/Users/horacio/.local/bin:$PATH"
+
+# Added by MiniMax Code
+export PATH="/Users/horacio/.mavis/bin:$PATH"

@@ -19,3 +19,4 @@ if [ -f ~/.zshrc ]; then
     source ~/.zshrc
 fi
 
+export PATH="$HOME/.local/bin:$PATH"

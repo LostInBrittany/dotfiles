@@ -22,6 +22,15 @@ function ansi(text, bgColor, color = 'rgb(255, 255, 255)') {
   return `${RESET}${bgColorAnsi}${colorAnsi}${text}${RESET}`;
 }
 
+function formatQuotaRemaining(epochSeconds) {
+  const resetTime = epochSeconds * 1000;
+  const now = Date.now();
+  const diff = Math.max(0, resetTime - now);
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  return `${hours}h${String(minutes).padStart(2, '0')}m`;
+}
+
 function formatSections(sections) {
 
   const LEFT_ROUND = '\ue0b6';
@@ -67,8 +76,11 @@ try {
   const model = input.model.display_name;
   sections.push({ text: model, bgColor: "rgb(68, 68, 68)" });
 
-  // Context window usage
+  // Combined Claude metrics: C:CTX% S:SESS%/XhXm W:WEEKLY%/wed-HH:MM
   const contextWindow = input.context_window;
+  let claudeText = '';
+  let claudeBgColor = 'rgb(217, 119, 87)';
+  let claudeColor = 'rgb(0, 0, 0)';
 
   if (contextWindow?.current_usage && contextWindow?.context_window_size) {
     const usage = contextWindow.current_usage;
@@ -77,11 +89,32 @@ try {
                           (usage.cache_creation_input_tokens || 0) +
                           (usage.cache_read_input_tokens || 0);
     const contextSize = contextWindow.context_window_size;
-    const percent = Math.round((currentTokens / contextSize) * 100);
-    const isDumbZone = percent > CLAUDE_DUMB_ZONE;
-    const bgColor = isDumbZone ? "rgb(226, 0, 0)" : "rgb(217, 119, 87)";
-    const color = isDumbZone ? "rgb(255, 255, 255)" : "rgb(0, 0, 0)";
-    sections.push({ text: `${percent}%`, bgColor, color });
+    const ctxPercent = Math.round((currentTokens / contextSize) * 100);
+
+    claudeText = `󰆪 ${ctxPercent}%`;
+
+    // Set color based on context window usage
+    const isDumbZone = ctxPercent > CLAUDE_DUMB_ZONE;
+    claudeBgColor = isDumbZone ? 'rgb(226, 0, 0)' : 'rgb(217, 119, 87)';
+    claudeColor = isDumbZone ? 'rgb(255, 255, 255)' : 'rgb(0, 0, 0)';
+
+    // Add quota info if available
+    const rateLimits = input.rate_limits;
+    if (rateLimits?.five_hour) {
+      const sessPercent = Math.round(rateLimits.five_hour.used_percentage);
+      const sessRemaining = formatQuotaRemaining(rateLimits.five_hour.resets_at);
+      claudeText += ` 󰥔 ${sessPercent}% ${sessRemaining}`;
+    }
+
+    if (rateLimits?.seven_day) {
+      const weekPercent = Math.round(rateLimits.seven_day.used_percentage);
+      const resetDate = new Date(rateLimits.seven_day.resets_at * 1000);
+      const dayName = resetDate.toLocaleDateString('fr-FR', { weekday: 'short' }).toLowerCase().replace(/\./g, '');
+      const time = resetDate.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+      claudeText += ` 󱨲 ${weekPercent}% ${dayName} ${time}`;
+    }
+
+    sections.push({ text: claudeText, bgColor: claudeBgColor, color: claudeColor });
   }
 
   console.log(formatSections(sections));
